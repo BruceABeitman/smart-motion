@@ -6,6 +6,7 @@ import android.view.Menu;
 
 // Here's a comment for you
 // I changed something here for you
+//what happend here???
 public class MainActivity extends Activity {
 
 	@Override
