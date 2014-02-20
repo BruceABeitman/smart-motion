@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.view.Menu;
 
 // Here's a comment for you
-// are u sure the comment works????
+// I changed something here for you
 public class MainActivity extends Activity {
 
 	@Override
