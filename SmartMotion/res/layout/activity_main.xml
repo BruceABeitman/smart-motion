@@ -8,9 +8,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <EditText
+        android:id="@+id/usr_name_edit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_user_name_message" />
+    
+    <EditText
+        android:id="@+id/pass_name_edit"
+        android:layout_below="@id/usr_name_edit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_password_message" />
+    
+    <Button 
+        android:id="@+id/signIn_button"
+        android:layout_below="@id/pass_name_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/SignIn" 
+        android:onClick="Main_Menu"
+        />
 
+    <Button 
+        android:id="@+id/signUp_button"
+        android:layout_below="@id/signIn_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SignUp" 
+        />
+    
 </RelativeLayout>
