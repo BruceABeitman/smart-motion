@@ -1,0 +1,2 @@
+serviceClass: com.cse.smartmotioncloud.client.GestureService
+path: B939A673BA0B0E87413D102CCD2F2303.gwt.rpc
