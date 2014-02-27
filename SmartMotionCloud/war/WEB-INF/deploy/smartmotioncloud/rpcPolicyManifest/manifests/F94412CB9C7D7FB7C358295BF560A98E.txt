@@ -1,0 +1,2 @@
+serviceClass: com.cse.smartmotioncloud.client.GreetingService
+path: A985D8B264F5F149D04403B640F8FFBB.gwt.rpc
