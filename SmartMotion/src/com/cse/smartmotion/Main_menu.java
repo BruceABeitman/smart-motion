@@ -1,12 +1,14 @@
 package com.cse.smartmotion;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
 public class Main_menu extends Activity {
+String tag="SmartMotion";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,26 @@ public class Main_menu extends Activity {
 		return true;
 	}
 
+	
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		Log.d(tag,"my gesture is in onResume!");
+	}
+	
+	@Override
+	public void onPause(){
+		super.onResume();
+		Log.d(tag,"my gesture is in onPause!");
+	}
+	
+	@Override
+	public void onStop(){
+		super.onResume();
+		Log.d(tag,"my gesture is in onStop!");
+	}
+	
 	
 	public void New_Gesture(View view){
 		Intent intent=new Intent(this, New_Gesture.class);
