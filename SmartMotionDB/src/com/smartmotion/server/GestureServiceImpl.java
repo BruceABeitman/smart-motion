@@ -70,6 +70,7 @@ public class GestureServiceImpl extends RemoteServiceServlet implements
 			List<GAccount> Accounts = (List<GAccount>) pm.newQuery(query).execute();
  
 			for (GAccount account : Accounts) {
+				LOG.log(Level.SEVERE, "account queried 1 " + account.getAccount());
 				accounts.add(account.getAccount());
 				passwords.add(account.getPassword());
 				gestures.add(account.getGesture());
@@ -84,17 +85,14 @@ public class GestureServiceImpl extends RemoteServiceServlet implements
 		if (accounts.size() > 0) {
 			for (int i=0; i<accounts.size(); i++) {
 				ret[0][i] = accounts.get(i);
-				i++;
 			}
 			
 			for (int i=0; i<passwords.size(); i++) {
 				ret[1][i] = passwords.get(i);
-				i++;
 			}
 			
 			for (int i=0; i<gestures.size(); i++) {
 				ret[2][i] = gestures.get(i);
-				i++;
 			}
 		}
  
