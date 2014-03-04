@@ -37,6 +37,7 @@ public class SmartMotionDB implements EntryPoint {
 	private TextBox accountTextBox = new TextBox();
 	private TextBox passTextBox = new TextBox();
 	private TextBox gestureTextBox = new TextBox();
+	
 	private Button addAccountButton = new Button("Add");
 	private Button removeAccountButton = new Button("Remove");
 	private Button closeButton = new Button("Close");
@@ -61,12 +62,34 @@ public class SmartMotionDB implements EntryPoint {
 	private final GestureServiceAsync gestureService = GWT.create(GestureService.class);
  
 	public void onModuleLoad() {
+		
+		accountTextBox.setText("User Account");
+		passTextBox.setText("Password");
+		gestureTextBox.setText("Gesture1;Gesture2");
+		
+		accountTextBox.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				accountTextBox.selectAll();
+			}
+		});
+		
+		passTextBox.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				passTextBox.selectAll();
+			}
+		});
+		
+		gestureTextBox.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				gestureTextBox.selectAll();
+			}
+		});
  
 		// Create table for stock data.  
-		notesFlexTable.setText(0, 0, "User*");  
-		notesFlexTable.setText(0, 1, "Password");  
-		notesFlexTable.setText(0, 2, "Gesture");  
-		notesFlexTable.setText(0, 3, "Remove");
+		notesFlexTable.setText(0, 1, "User*");  
+		notesFlexTable.setText(0, 2, "Password");  
+		notesFlexTable.setText(0, 3, "Gesture");  
+		notesFlexTable.setText(0, 0, "");
 //		notesFlexTable.setText(0, 4, "Edit");
 				
 		// Assemble Add Stock panel.
@@ -128,13 +151,29 @@ public class SmartMotionDB implements EntryPoint {
 		});
  
 		// Listen for keyboard events in the input box.
-//		newSymbolTextBox.addKeyPressHandler(new KeyPressHandler() {
-//			public void onKeyPress(KeyPressEvent event) {
-//				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
-//					addNote();
-//				}
-//			}
-//		});
+		accountTextBox.addKeyPressHandler(new KeyPressHandler() {
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+					addNote();
+				}
+			}
+		});
+		
+		passTextBox.addKeyPressHandler(new KeyPressHandler() {
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+					addNote();
+				}
+			}
+		});
+		
+		gestureTextBox.addKeyPressHandler(new KeyPressHandler() {
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+					addNote();
+				}
+			}
+		});
  
 		//load notes initially.
 		loadNotes();
@@ -170,6 +209,9 @@ public class SmartMotionDB implements EntryPoint {
 			public void onSuccess(Void ignore) {
 				// when successful, do something, about UI
 				displayNote(account, password, gesture);
+				accountTextBox.setText("User Account");
+				passTextBox.setText("Password");
+				gestureTextBox.setText("Gesture1;Gesture2");
 			}
 		};
  
@@ -187,9 +229,9 @@ public class SmartMotionDB implements EntryPoint {
 		// Add the Note to the table.
 		int row = notesFlexTable.getRowCount();
 		NotesNames.add(account);
-		notesFlexTable.setText(row, 0, account);
-		notesFlexTable.setText(row, 1, password);
-		notesFlexTable.setText(row, 2, gesture);
+		notesFlexTable.setText(row, 1, account);
+		notesFlexTable.setText(row, 2, password);
+		notesFlexTable.setText(row, 3, gesture);
  
 		Button removeNoteButton = new Button("x");
 		removeNoteButton.addStyleDependentName("remove");
@@ -198,7 +240,7 @@ public class SmartMotionDB implements EntryPoint {
 				removeNote(account);
 			}
 		});
-		notesFlexTable.setWidget(row, 3, removeNoteButton);
+		notesFlexTable.setWidget(row, 0, removeNoteButton);
  
 	}
  
@@ -228,7 +270,6 @@ public class SmartMotionDB implements EntryPoint {
 			@Override
 			public void onSuccess(String[][] result) {
 				displayNotes(result);
-				
 			}
 		});
  
@@ -239,7 +280,7 @@ public class SmartMotionDB implements EntryPoint {
 		String[] password = accounts[1];
 		String[] gesture = accounts[2];
 		
-		for (int i=0; i< account.length; i++) {
+		for (int i=0; i<account.length; i++) {
 			displayNote(account[i], password[i], gesture[i]);
 		}
 	}

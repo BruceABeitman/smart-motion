@@ -1,2 +1,3 @@
 # Module smartmotiondb
 # RPC service class, partial path of RPC policy file
+com.smartmotion.client.GestureService, 8095D161F86BF6E3E03AD09BB3E23DF5.gwt.rpc
