@@ -9,4 +9,6 @@ public interface GestureServiceAsync {
 	void addNote(String[] account, AsyncCallback<Void> callback);
 	void getNotes(AsyncCallback<String[][]> callback);
 	void removeNote(String note, AsyncCallback<Void> callback);
+	
+	void updateGesture(String account, String gesture, AsyncCallback<Void> callback);
 }

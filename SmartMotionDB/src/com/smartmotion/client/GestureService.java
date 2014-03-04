@@ -11,4 +11,6 @@ public interface GestureService extends RemoteService {
 	  public void addNote(String[] account);
 	  public void removeNote(String note);
 	  public String[][] getNotes();
+	  
+	  public void updateGesture(String account, String gesture);
 }

@@ -54,6 +54,10 @@ public class GAccount {
 	public String getGesture() {
 		return this.gesture;
 	}
+	
+	public void updateGesture(String gesture) {
+		this.gesture = gesture;
+	}
  
 	public Date getCreateDate() {
 		return this.createDate;

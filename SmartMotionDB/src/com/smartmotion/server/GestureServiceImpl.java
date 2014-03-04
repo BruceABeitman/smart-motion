@@ -102,4 +102,24 @@ public class GestureServiceImpl extends RemoteServiceServlet implements
 	private PersistenceManager getPersistenceManager() {
 		return PMF.getPersistenceManager();
 	}
+
+	@Override
+	public void updateGesture(String account, String gesture) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			long deleteCount = 0;	
+			String query = "select from " + GAccount.class.getName();
+			List<GAccount> Notes = (List<GAccount>) pm.newQuery(query).execute();
+			for (GAccount Note : Notes) {
+				if (account.equals(Note.getAccount())) {
+					Note.updateGesture(gesture);
+				}
+			}
+			if (deleteCount != 1) {
+				LOG.log(Level.WARNING, "updated ");
+			}
+		} finally {
+			pm.close();
+		}
+	}
 }
