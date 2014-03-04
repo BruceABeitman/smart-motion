@@ -86,13 +86,14 @@ public class SmartMotionDB implements EntryPoint {
 		});
  
 		// Create table for stock data.  
-		notesFlexTable.setText(0, 1, "User*");  
-		notesFlexTable.setText(0, 2, "Password");  
-		notesFlexTable.setText(0, 3, "Gesture");  
+		notesFlexTable.setText(0, 2, "User*");  
+		notesFlexTable.setText(0, 3, "Password");  
+		notesFlexTable.setText(0, 4, "Gesture");  
 		notesFlexTable.setText(0, 0, "");
+		notesFlexTable.setText(0, 1, "");
 //		notesFlexTable.setText(0, 4, "Edit");
 				
-		// Assemble Add Stock panel.
+		// Assemble Add Account panel.
 	    addPanel.add(accountTextBox);
 	    addPanel.add(passTextBox);
 	    addPanel.add(gestureTextBox);
@@ -229,9 +230,9 @@ public class SmartMotionDB implements EntryPoint {
 		// Add the Note to the table.
 		int row = notesFlexTable.getRowCount();
 		NotesNames.add(account);
-		notesFlexTable.setText(row, 1, account);
-		notesFlexTable.setText(row, 2, password);
-		notesFlexTable.setText(row, 3, gesture);
+		notesFlexTable.setText(row, 2, account);
+		notesFlexTable.setText(row, 3, password);
+		notesFlexTable.setText(row, 4, gesture);
  
 		Button removeNoteButton = new Button("x");
 		removeNoteButton.addStyleDependentName("remove");
@@ -241,6 +242,15 @@ public class SmartMotionDB implements EntryPoint {
 			}
 		});
 		notesFlexTable.setWidget(row, 0, removeNoteButton);
+		Button UpdateButton = new Button("Update");
+		UpdateButton.addStyleDependentName("Edit");
+		UpdateButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				undisplayNote(account);
+				editNote(account, password);
+			}
+		});
+		notesFlexTable.setWidget(row, 1, UpdateButton);
  
 	}
  
@@ -251,6 +261,18 @@ public class SmartMotionDB implements EntryPoint {
  
 			public void onSuccess(Void ignore) {
 				undisplayNote(note);
+			}
+		});
+	}
+	
+	private void editNote(final String note, final String password) {
+		final String gesture = gestureTextBox.getText().trim();
+		gestureService.updateGesture(note, gesture, new AsyncCallback<Void>() {
+			public void onFailure(Throwable error) {
+			}
+ 
+			public void onSuccess(Void ignore) {
+				displayNote(note, password, gesture);
 			}
 		});
 	}
