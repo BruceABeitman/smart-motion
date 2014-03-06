@@ -16,11 +16,18 @@ package com.cse.smartmotion;
  *  TODO:
  * 
  */
+import java.util.List;
+
 public class Pattern {	
+	/*
+	 * Constants
+	 */
+
+	
 	/*
 	 * Class fields
 	 */
-	private int[] patternCode;
+	private List<Integer> patternCode;
 	private int patternLength;
 	
 	/*
@@ -33,13 +40,8 @@ public class Pattern {
 	}
 	//Make an independent copy of the input pattern.
 	public Pattern(Pattern pattern){
-		this.patternCode.clone();
+		this.patternCode = pattern.getPatternCode();
 		this.patternLength=pattern.getPatternLength();
-	}
-	//Construct a pattern from raw rotation data
-	public Pattern(float[] time, float[] theta, float[] phi, float[] psi){
-		this.patternCode = Pattern.generatePatternCode(time, theta, phi, psi);
-		this.patternLength = this.patternCode.length;
 	}
 	//Construct a pattern from a RawData object
 	public Pattern(RawData rawData){
@@ -49,12 +51,12 @@ public class Pattern {
 	/*
 	 * Get/Set functions
 	 */
-	public int[] getPatternCode() {
+	public List<Integer> getPatternCode() {
 		return patternCode;
 	}
-	public void setPatternCode(int[] patternCode) {
+	public void setPatternCode(List<Integer> patternCode) {
 		this.patternCode = patternCode;
-		this.patternLength = patternCode.length;
+		this.patternLength = patternCode.size();
 	}
 	public int getPatternLength() {
 		return patternLength;
@@ -72,24 +74,30 @@ public class Pattern {
 			return false;
 		}
 		
-		int[] tempPatternCode = pattern.getPatternCode();
+		List<Integer> tempPatternCode = pattern.getPatternCode();
 		for(int i=0; i<this.patternLength; i++){
-			if(this.patternCode[i] != tempPatternCode[i]){
+			if(this.patternCode.get(i) != tempPatternCode.get(i)){
 				isEqual = false;
 			}
 		}
 		
 		return isEqual;
 	}
-	//Takes raw input rotation data and generates the pattern code.
-	private static int[] generatePatternCode(float[] time, float[] theta,
-			float[] phi, float[] psi) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	//Takes a RawData object and generates a pattern
-	private static int[] generatePatternCode(RawData rawData) {
-		// TODO Auto-generated method stub
+	private static List<Integer> generatePatternCode(RawData rawData) {
+		
+		//Get the critical values from the x and y data sets in rawData
+		int[][] critValsAndTypeX = rawData.findCriticalPointsX();
+		int[] critValsX = critValsAndTypeX[0];
+		int[] typeX = critValsAndTypeX[1];
+		int[][] critValsAndTypeY = rawData.findCriticalPointsY();
+		int[] critValsY = critValsAndTypeY[0];
+		int[] typeY = critValsAndTypeY[1];
+		
+		
+		
 		return null;
 	}
+	
 }

@@ -1,4 +1,5 @@
 package com.cse.smartmotion;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +25,10 @@ public class RawData {
 	/*
 	 * Static variables
 	 */
+	//The maximum number of zeroes to look for
 	private static int MAX_ZEROES = 20;
+	//The maximum number of iterations to run through when sorting the critical points
+	private static final int MAX_ITERATIONS = 100;
 	
 	/*
 	 * Fields
@@ -227,13 +231,22 @@ public class RawData {
 	public int[] findExtremaZ(){
 		return findExtrema(this.z);
 	}
-	
+	//Returns a list of extrema in the x, y, or z data sets
+	public int[][] findCriticalPointsX(){
+		return findCriticalPoints(this.x);
+	}
+	public int[][] findCriticalPointsY(){
+		return findCriticalPoints(this.y);
+	}
+	public int[][] findCriticalPointsZ(){
+		return findCriticalPoints(this.z);
+	}
 
 	/*
 	 * Private utility
 	 */
 	//Gives the maximum value in a float array
-	private static float max(float[] values) {
+	public static float max(float[] values) {
 		int length = values.length;
 		float maxSize=0;
 		if(length!=0){
@@ -247,7 +260,7 @@ public class RawData {
 		return maxSize;
 	}
 	//Gives the maximum value in an int array
-	private static int max(int[] values) {
+	public static int max(int[] values) {
 		int length = values.length;
 		int maxSize=0;
 		if(length!=0){
@@ -261,7 +274,7 @@ public class RawData {
 		return maxSize;
 	}	
 	//Gives the minimum value in an float array
-	private static float min(float[] values) {
+	public static float min(float[] values) {
 		int length = values.length;
 		float minSize=0;
 		if(length!=0){
@@ -275,7 +288,7 @@ public class RawData {
 		return minSize;
 	}
 	//Gives the minimum value in an int array
-	private static int min(int[] values) {
+	public static int min(int[] values) {
 		int length = values.length;
 		int minSize=0;
 		if(length!=0){
@@ -376,5 +389,79 @@ public class RawData {
 		}
 		
 		return extremumIndex;
+	}
+	
+	//Get the zeroes and extrema store in list of integers {{index1, index2,...},{type1, type2,...}}
+	private static int[][] findCriticalPoints(float[] data){
+		int[] zeroes = RawData.findZeroes(data);
+		int[] extrema = RawData.findExtrema(data);
+		
+		int sizeZeroesX = zeroes.length;
+		int sizeExtremaX= extrema.length;
+		int[] criticalPoints = new int[sizeZeroesX+sizeExtremaX];
+		int[] type = new int[sizeZeroesX+sizeExtremaX];
+		
+		int iterZeroes = 0;
+		int iterExtrema = 0;
+		int maxIterations =0;
+		while(iterZeroes+iterExtrema< sizeZeroesX+sizeExtremaX && maxIterations < MAX_ITERATIONS){
+			if(iterZeroes < sizeZeroesX && iterExtrema < sizeExtremaX){
+				if(zeroes[iterZeroes]<extrema[iterExtrema]){
+					criticalPoints[iterZeroes+iterExtrema] = zeroes[iterZeroes];
+					type[iterZeroes+iterExtrema]=0;
+					iterZeroes++;
+
+				}
+				else{
+					criticalPoints[iterZeroes+iterExtrema] = extrema[iterExtrema];
+					type[iterZeroes+iterExtrema]= (int)Math.signum(data[extrema[iterExtrema]]);
+					iterExtrema++;
+
+				}
+			} 
+			else if(iterZeroes < sizeZeroesX && iterExtrema >= sizeExtremaX){
+				criticalPoints[iterZeroes+iterExtrema] = zeroes[iterZeroes];
+				type[iterZeroes+iterExtrema]=0;
+				iterZeroes++;
+			}
+			else if(iterZeroes >= sizeZeroesX && iterExtrema < sizeExtremaX){
+				criticalPoints[iterZeroes+iterExtrema] = extrema[iterExtrema];
+				type[iterZeroes+iterExtrema]= (int)Math.signum(data[extrema[iterExtrema]]);
+				iterExtrema++;
+			}
+			maxIterations++;
+		}
+		
+		int[][] critPointsAndTyp = {criticalPoints, type}; 
+		
+		return critPointsAndTyp;
+	}
+	
+	public static float[] smoothData(float[] data, int period){
+		//if the data length is not a multiple of period, truncate from the end
+		int dataLength = data.length;
+		int newLength;
+		float[] truncData;
+		if(dataLength%period!=0){
+			newLength=dataLength-dataLength%period;
+			truncData = Arrays.copyOf(data, newLength);
+		}
+		else{
+			newLength = dataLength;
+			truncData = data;
+		}
+		
+		int numPeriod = newLength/period;
+		float[] smoothData = new float[numPeriod];
+		int iter=0;
+		for(int i=0; i<newLength; i+=period){
+			float sum =0;
+			for(int j=0; j<period; j++){
+				sum+=truncData[i+j];
+			}
+			smoothData[iter]=sum/period;
+			iter++;
+		}
+		return smoothData;
 	}
 }
