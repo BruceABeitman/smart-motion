@@ -22,6 +22,8 @@ public class Pattern {
 	/*
 	 * Constants
 	 */
+	private static final int FILTER_PERIOD = 10;
+	private static final float THRESHOLD = 3;
 
 	
 	/*
@@ -45,7 +47,8 @@ public class Pattern {
 	}
 	//Construct a pattern from a RawData object
 	public Pattern(RawData rawData){
-		this.patternCode = Pattern.generatePatternCode(rawData);
+		rawData.filterNoiseXY(FILTER_PERIOD);
+		this.patternCode = Pattern.generatePatternCodeXY(rawData);
 	}
 	
 	/*
@@ -85,19 +88,109 @@ public class Pattern {
 	}
 
 	//Takes a RawData object and generates a pattern
-	private static List<Integer> generatePatternCode(RawData rawData) {
+	private static List<Integer> generatePatternCodeXY(RawData rawData) {
+		float[] time = rawData.getTime();
+		float[] x = rawData.getX();
+		float[] y = rawData.getY();
+		int lengthData = rawData.getSize();
 		
-		//Get the critical values from the x and y data sets in rawData
-		int[][] critValsAndTypeX = rawData.findCriticalPointsX();
-		int[] critValsX = critValsAndTypeX[0];
-		int[] typeX = critValsAndTypeX[1];
-		int[][] critValsAndTypeY = rawData.findCriticalPointsY();
-		int[] critValsY = critValsAndTypeY[0];
-		int[] typeY = critValsAndTypeY[1];
+		float xTemp;
+		float yTemp;
 		
-		
-		
+		int iter =0;
+		while(iter<lengthData){
+			xTemp=x[iter];
+			yTemp=y[iter];
+			
+			if(xTemp<THRESHOLD && yTemp<THRESHOLD){
+				//do nothing; iterate
+			} 
+			else if(xTemp<THRESHOLD){
+				boolean isCriticalY = false;
+				//test y for critical value
+				if(isCriticalY){
+					boolean isUp = false;
+					//test if up or down
+					if(isUp)
+					{
+						//add an up to the pattern
+					} 
+					else
+					{
+						//add a down to the pattern
+					}
+					//iterate
+				}
+				else{
+					//do nothing; iterate
+				}
+			}
+			else if(yTemp<THRESHOLD){
+				boolean isCriticalX = false;
+				//test x for critical value
+				if(isCriticalX){
+					boolean isRight = false;
+					//test if right or left
+					if(isRight)
+					{
+						//add a Right to the pattern
+					} 
+					else
+					{
+						//add a left to the pattern
+					}
+					//iterate
+				}
+				else{
+					//do nothing; iterate
+				}
+			}
+			else{
+				//Both signals are above threshold, consider the signal with larger absolute value
+				if(xTemp>yTemp){
+					boolean isCriticalX = false;
+					//test x for critical value
+					if(isCriticalX){
+						boolean isRight = false;
+						//test if right or left
+						if(isRight)
+						{
+							//add a Right to the pattern
+						} 
+						else
+						{
+							//add a left to the pattern
+						}
+						//iterate
+					}
+					else{
+						//do nothing; iterate
+					}
+				}
+				else{
+					boolean isCriticalY = false;
+					//test y for critical value
+					if(isCriticalY){
+						boolean isUp = false;
+						//test if up or down
+						if(isUp)
+						{
+							//add an up to the pattern
+						} 
+						else
+						{
+							//add a down to the pattern
+						}
+						//iterate
+					}
+					else{
+						//do nothing; iterate
+					}
+				}
+			}
+		}
 		return null;
 	}
+	
 	
 }

@@ -33,7 +33,7 @@ public class RawData {
 	/*
 	 * Fields
 	 */
-	private float[] time;
+	private float[] t;
 	private float[] x;
 	private float[] y;
 	private float[] z;
@@ -45,7 +45,7 @@ public class RawData {
 	 */
 	//Initialize an empty data set
 	public RawData() {
-		time = null;
+		t = null;
 		x = null;
 		y = null;
 		z = null;
@@ -54,7 +54,7 @@ public class RawData {
 	}
 	//Initialize a time and 1D data set
 	public RawData(float[] time, float[] x){
-		this.time = time.clone();
+		this.t = time.clone();
 		this.x = x.clone();
 		this.y = null;
 		this.z = null;
@@ -70,10 +70,10 @@ public class RawData {
 		int[] sizes = {time.size(), x.size()};
 		int size = RawData.min(sizes);
 		
-		this.time = new float[size];
+		this.t = new float[size];
 		this.x = new float[size];
 		for(int i=0; i<size; i++){
-			this.time[i] = time.get(i);
+			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
 		}
 		this.y = null;
@@ -84,7 +84,7 @@ public class RawData {
 	}
 	//Initialize a time and 2D data set
 	public RawData(float[] time, float[] x, float[] y){
-		this.time = time.clone();
+		this.t = time.clone();
 		this.x = x.clone();
 		this.y = y.clone();
 		this.z = null;
@@ -100,11 +100,11 @@ public class RawData {
 		int[] sizes = {time.size(), x.size(), y.size()};
 		int size = RawData.min(sizes);
 		
-		this.time = new float[size];
+		this.t = new float[size];
 		this.x = new float[size];
 		this.y = new float[size];
 		for(int i=0; i<size; i++){
-			this.time[i] = time.get(i);
+			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
 			this.y[i] = y.get(i);
 		}
@@ -115,7 +115,7 @@ public class RawData {
 	}
 	//Initialize a time and 3D data set
 	public RawData(float[] time, float[] x, float[] y, float[] z) {
-		this.time = time.clone();
+		this.t = time.clone();
 		this.x = x.clone();
 		this.y = y.clone();
 		this.z = z.clone();
@@ -131,11 +131,11 @@ public class RawData {
 		int[] sizes = {time.size(), x.size(), y.size(), z.size()};
 		int size = RawData.min(sizes);
 		
-		this.time = new float[size];
+		this.t = new float[size];
 		this.x = new float[size];
 		this.y = new float[size];
 		for(int i=0; i<size; i++){
-			this.time[i] = time.get(i);
+			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
 			this.y[i] = y.get(i);
 			this.z[i] = z.get(i);
@@ -149,7 +149,7 @@ public class RawData {
 	 * Get
 	 */
 	public float[] getTime() {
-		return time;
+		return t;
 	}
 	public float[] getX(){
 		return x;
@@ -173,7 +173,7 @@ public class RawData {
 	 * TODO: size and dimension should be updated consistently with time, x, y, and z
 	 */
 	public void setTime(float[] time) {
-		this.time = time;
+		this.t = time;
 	}
 	public void setX(float[] x) {
 		this.x = x;
@@ -190,22 +190,22 @@ public class RawData {
 	 */
 	//Returns the running integration of the elements x,y, or z.
 	public float[] integrateX(){
-		if(this.time!=null && this.x!=null){
-			return integrate(this.time,this.x);
+		if(this.t!=null && this.x!=null){
+			return integrate(this.t,this.x);
 		}
 		else
 			return null;
 	}
 	public float[] integrateY(){
-		if(this.time!=null && this.y!=null){
-			return integrate(this.time,this.y);
+		if(this.t!=null && this.y!=null){
+			return integrate(this.t,this.y);
 		}
 		else
 			return null;
 	}
 	public float[] integrateZ(){
-		if(this.time!=null && this.z!=null){
-			return integrate(this.time,this.z);
+		if(this.t!=null && this.z!=null){
+			return integrate(this.t,this.z);
 		}
 		else
 			return null;
@@ -437,31 +437,42 @@ public class RawData {
 		return critPointsAndTyp;
 	}
 	
-	public static float[] smoothData(float[] data, int period){
+	public void filterNoiseXY(int period){
 		//if the data length is not a multiple of period, truncate from the end
-		int dataLength = data.length;
+		int dataLength=this.size;
 		int newLength;
-		float[] truncData;
-		if(dataLength%period!=0){
-			newLength=dataLength-dataLength%period;
-			truncData = Arrays.copyOf(data, newLength);
-		}
-		else{
-			newLength = dataLength;
-			truncData = data;
-		}
+		float[] truncTime;
+		float[] truncDataX;
+		float[] truncDataY;
+
+		newLength=dataLength-dataLength%period;
+		truncTime = Arrays.copyOf(this.t, newLength);
+		truncDataX = Arrays.copyOf(this.x, newLength);
+		truncDataY = Arrays.copyOf(this.y, newLength);
 		
 		int numPeriod = newLength/period;
-		float[] smoothData = new float[numPeriod];
+		float[] smoothT = new float[numPeriod];
+		float[] smoothX = new float[numPeriod];
+		float[] smoothY = new float[numPeriod];
 		int iter=0;
 		for(int i=0; i<newLength; i+=period){
-			float sum =0;
+			float sumT =0;
+			float sumX =0;
+			float sumY =0;
 			for(int j=0; j<period; j++){
-				sum+=truncData[i+j];
+				sumT+=truncTime[i+j];
+				sumX+=truncDataX[i+j];
+				sumY+=truncDataY[i+j];
 			}
-			smoothData[iter]=sum/period;
+			smoothT[iter]=sumT/period;
+			smoothX[iter]=sumX/period;
+			smoothY[iter]=sumY/period;
 			iter++;
 		}
-		return smoothData;
+		
+		this.t=smoothT;
+		this.x=smoothX;
+		this.y=smoothY;
 	}
+	 
 }
