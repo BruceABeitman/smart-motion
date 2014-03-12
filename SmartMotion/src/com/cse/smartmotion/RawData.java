@@ -1,5 +1,6 @@
 package com.cse.smartmotion;
 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -242,9 +243,6 @@ public class RawData {
 		return findCriticalPoints(this.z);
 	}
 
-	/*
-	 * Private utility
-	 */
 	//Gives the maximum value in a float array
 	public static float max(float[] values) {
 		int length = values.length;
@@ -302,6 +300,9 @@ public class RawData {
 		return minSize;
 	}
 	
+	/*
+	 * Private utility
+	 */
 	//Very basic integration routine. The initial value is set to zero.
 	private static float[] integrate(float[] time, float[] space){
 		int[] sizes = {time.length, space.length};

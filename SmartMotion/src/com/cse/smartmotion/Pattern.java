@@ -1,4 +1,5 @@
 package com.cse.smartmotion;
+
 /*
  * Filename: Pattern.java
  * Author: Hudson Smith
@@ -6,30 +7,35 @@ package com.cse.smartmotion;
  * 
  *  Encapsulates a pattern and methods for creating, comparing, and editing patterns. 
  *  Patterns are stored as a list of integers:
- *  1 represents a right flick
- *  2 represents a left flick
- *  3 represents an up flick
- *  4 represents a down flick
- *  Thus, a given pattern will be represented e.g. {1,1,4,2,...} which corresponds with 
+ *  r represents a right flick
+ *  l represents a left flick
+ *  u represents an up flick
+ *  d represents a down flick
+ *  Thus, a given pattern will be represented e.g. {'r','r','d','l',...} which corresponds with 
  *  {right, right, down, left, ...}
  *  
  *  TODO:
  * 
  */
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Pattern {	
 	/*
 	 * Constants
 	 */
-	private static final int FILTER_PERIOD = 10;
-	private static final float THRESHOLD = 3;
+	private static final int FILTER_PERIOD = 3;
+	private static final float THRESHOLD = 1.5f;
+	private static final char UP = 'u';
+	private static final char DOWN = 'd';
+	private static final char LEFT = 'l';
+	private static final char RIGHT = 'r';
 
-	
 	/*
 	 * Class fields
 	 */
-	private List<Integer> patternCode;
+	private List<Character> patternCode;
 	private int patternLength;
 	
 	/*
@@ -49,15 +55,16 @@ public class Pattern {
 	public Pattern(RawData rawData){
 		rawData.filterNoiseXY(FILTER_PERIOD);
 		this.patternCode = Pattern.generatePatternCodeXY(rawData);
+		this.patternLength = this.patternCode.size();
 	}
 	
 	/*
 	 * Get/Set functions
 	 */
-	public List<Integer> getPatternCode() {
+	public List<Character> getPatternCode() {
 		return patternCode;
 	}
-	public void setPatternCode(List<Integer> patternCode) {
+	public void setPatternCode(List<Character> patternCode) {
 		this.patternCode = patternCode;
 		this.patternLength = patternCode.size();
 	}
@@ -77,7 +84,7 @@ public class Pattern {
 			return false;
 		}
 		
-		List<Integer> tempPatternCode = pattern.getPatternCode();
+		List<Character> tempPatternCode = pattern.getPatternCode();
 		for(int i=0; i<this.patternLength; i++){
 			if(this.patternCode.get(i) != tempPatternCode.get(i)){
 				isEqual = false;
@@ -88,109 +95,93 @@ public class Pattern {
 	}
 
 	//Takes a RawData object and generates a pattern
-	private static List<Integer> generatePatternCodeXY(RawData rawData) {
-		float[] time = rawData.getTime();
-		float[] x = rawData.getX();
-		float[] y = rawData.getY();
-		int lengthData = rawData.getSize();
+	public static List<Character> generatePatternCodeXY(RawData rawData) {
+		List<Character> patternCode = new ArrayList<Character>();
 		
-		float xTemp;
-		float yTemp;
+		float[] pitch = rawData.getX();
+		float[] yaw = rawData.getY();
+		int[] xExtrema = rawData.findExtremaX();
+		int[] yExtrema = rawData.findExtremaY();
+
+		int lengthData = pitch.length;
+//		int lengthData = rawData.getSize();
+		
+		float pitchTemp;
+		float yawTemp;
 		
 		int iter =0;
 		while(iter<lengthData){
-			xTemp=x[iter];
-			yTemp=y[iter];
+			pitchTemp=pitch[iter];
+			yawTemp=yaw[iter];
 			
-			if(xTemp<THRESHOLD && yTemp<THRESHOLD){
-				//do nothing; iterate
-			} 
-			else if(xTemp<THRESHOLD){
-				boolean isCriticalY = false;
-				//test y for critical value
-				if(isCriticalY){
-					boolean isUp = false;
+			//y above threshold, x below threshold
+			if(Math.abs(yawTemp)>=THRESHOLD && Math.abs(pitchTemp)<THRESHOLD){
+				if(Pattern.isInSet(iter, yExtrema)){
 					//test if up or down
-					if(isUp)
+					if(yawTemp > THRESHOLD)
 					{
-						//add an up to the pattern
+						patternCode.add(LEFT);
 					} 
 					else
 					{
-						//add a down to the pattern
+						patternCode.add(RIGHT);
 					}
-					//iterate
-				}
-				else{
-					//do nothing; iterate
 				}
 			}
-			else if(yTemp<THRESHOLD){
-				boolean isCriticalX = false;
-				//test x for critical value
-				if(isCriticalX){
-					boolean isRight = false;
-					//test if right or left
-					if(isRight)
+			//x above threshold, y below threshold
+			else if(Math.abs(pitchTemp)>=THRESHOLD && Math.abs(yawTemp)<THRESHOLD){
+				if(Pattern.isInSet(iter, xExtrema)){
+					//test if up or down
+					if(pitchTemp > THRESHOLD)
 					{
-						//add a Right to the pattern
+						patternCode.add(UP);
 					} 
 					else
 					{
-						//add a left to the pattern
+						patternCode.add(DOWN);
 					}
-					//iterate
-				}
-				else{
-					//do nothing; iterate
 				}
 			}
-			else{
-				//Both signals are above threshold, consider the signal with larger absolute value
-				if(xTemp>yTemp){
-					boolean isCriticalX = false;
-					//test x for critical value
-					if(isCriticalX){
-						boolean isRight = false;
-						//test if right or left
-						if(isRight)
-						{
-							//add a Right to the pattern
-						} 
-						else
-						{
-							//add a left to the pattern
-						}
-						//iterate
-					}
-					else{
-						//do nothing; iterate
-					}
-				}
-				else{
-					boolean isCriticalY = false;
-					//test y for critical value
-					if(isCriticalY){
-						boolean isUp = false;
+			else if(Math.abs(pitchTemp)>=THRESHOLD && Math.abs(yawTemp)>=THRESHOLD){
+				if(Math.abs(yawTemp)>=Math.abs(pitchTemp)){
+					if(Pattern.isInSet(iter, yExtrema)){
 						//test if up or down
-						if(isUp)
+						if(yawTemp > THRESHOLD)
 						{
-							//add an up to the pattern
+							patternCode.add(LEFT);
 						} 
 						else
 						{
-							//add a down to the pattern
+							patternCode.add(RIGHT);
 						}
-						//iterate
 					}
-					else{
-						//do nothing; iterate
+				}
+				else{
+					if(Pattern.isInSet(iter, xExtrema)){
+						//test if up or down
+						if(pitchTemp > THRESHOLD)
+						{
+							patternCode.add(UP);
+						} 
+						else
+						{
+							patternCode.add(DOWN);
+						}
 					}
 				}
 			}
+			
+			iter++;
 		}
-		return null;
+		return patternCode;
 	}
-	
-	
+	private static boolean isInSet(int elem, int[] set) {
+		int index = Arrays.binarySearch(set, elem);
+		if(index>=0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
