@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.cse.smartmotion.CreateAccount"
+            android:label="Create Account" >
+        </activity>
+        <activity
             android:name="com.cse.smartmotion.Main_menu"
             android:label="@string/title_activity_main_menu" >
         </activity>
