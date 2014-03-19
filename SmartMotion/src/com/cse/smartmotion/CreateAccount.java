@@ -37,6 +37,7 @@ public class CreateAccount extends Activity implements OnClickListener {
 		if ((password.equals(confirm)) && (!username.equals(""))
 				&& (!password.equals("")) && (!confirm.equals(""))) {
 			this.dh = new DataBaseHelper(this);
+			this.dh.open();
 			this.dh.createAccount(username, password);
 			// this.labResult.setText("Added");
 			Toast.makeText(CreateAccount.this, "new record inserted",
