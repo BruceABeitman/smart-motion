@@ -1,12 +1,20 @@
 package com.cse.smartmotion;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import android.view.View;
+import android.widget.TextView;
 
 public class New_Gesture extends Activity {
+
+	private static final int GET_META_DATA = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,5 +56,38 @@ public class New_Gesture extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		Bundle extras = getIntent().getExtras(); 
+		
+		if (null != extras){
+        String package_selected = (String) extras.getString("package_name");
+
+        final PackageManager pm = getApplicationContext().getPackageManager();
+        ApplicationInfo app_selected=null;
+        try {
+        	app_selected = pm.getApplicationInfo( package_selected, GET_META_DATA);
+           
+        } catch (final NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        TextView tv = (TextView)findViewById(R.id.app_selected);
+        tv.setText("App to Launch: "+ app_selected.loadLabel(pm));
+		}
+		
+		
+		
+	}
+	
+	public void select_app(View view){
+		Intent intent=new Intent(this, AllAppsActivity.class);
+		startActivity(intent);
+	}
+	
+
 
 }
