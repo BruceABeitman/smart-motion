@@ -7,7 +7,8 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
-
+ 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -44,6 +45,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cse.smartmotion.Main_menu" />
         </activity>
+        <receiver android:name="com.cse.smartmotion.BootReceiver">
+        	<intent-filter>
+		        <action android:name ="android.intent.action.BOOT_COMPLETED">
+		        </action>
+	        </intent-filter>
+        </receiver>
+        <service android:name="com.cse.smartmotion.MotionService">
+	        <intent-filter>
+		        <action android:name = "com.cse.smartmotion.MotionService">
+		        </action>
+	        </intent-filter>
+        </service>
     </application>
 
 </manifest>

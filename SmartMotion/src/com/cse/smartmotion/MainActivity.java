@@ -2,6 +2,7 @@ package com.cse.smartmotion;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,17 +20,21 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
 	
 	private DataBaseHelper mDbHelper;
+	private static Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		MainActivity.context = getApplicationContext();
+		
 		mDbHelper = new DataBaseHelper(this);
         mDbHelper.open();
         
         Button signIn = (Button) findViewById(R.id.signIn_button);
         Button signUp = (Button) findViewById(R.id.signUp_button);
+        Button startService = (Button) findViewById(R.id.startService);
         
         signIn.setOnClickListener(new View.OnClickListener() {
 
@@ -42,6 +47,13 @@ public class MainActivity extends Activity {
 
             public void onClick(View view) {
                 createAccount();
+            }
+        });
+        
+        startService.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+            	startService();
             }
         });
 	}
@@ -107,6 +119,11 @@ public class MainActivity extends Activity {
 		startActivity(new Intent(this, CreateAccount.class));
 	}
 	
+	private void startService() {
+		Intent mServiceIntent = new Intent();
+	    mServiceIntent.setAction("com.cse.smartmotion.MotionService");
+	    context.startService(mServiceIntent);
+	}
 	
 
 }
