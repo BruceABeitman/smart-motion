@@ -5,18 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-// Here's a comment for you
-// I changed something here for you
-//what happend here???
+
 public class MainActivity extends Activity {
 	
 	private DataBaseHelper mDbHelper;
@@ -40,6 +35,7 @@ public class MainActivity extends Activity {
 
             public void onClick(View view) {
                 verifyAccount();
+            	
             }
         });
         
@@ -65,13 +61,10 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	public void Main_Menu(View view){
+	private void verifyAccount() {
 		Intent intent=new Intent(this, Main_menu.class);
 		startActivity(intent);
-	}
-	
-	private void verifyAccount() {
-		
+		/*
 		EditText editUsername = (EditText)findViewById(R.id.usr_name_edit);
 		EditText editPassword = (EditText)findViewById(R.id.pass_name_edit);
 
@@ -112,6 +105,8 @@ public class MainActivity extends Activity {
 								}
 							}).show();
 		}
+	
+	*/
 	}
 	
 
