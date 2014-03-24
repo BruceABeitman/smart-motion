@@ -46,11 +46,6 @@ public class AllAppsActivity extends ListActivity {
         boolean result = true;
  
         switch (item.getItemId()) {
-        /*case R.id.menu_about: {
-            displayAboutDialog();
- 
-            break;
-        }*/
         default: {
             result = super.onOptionsItemSelected(item);
  
@@ -61,27 +56,7 @@ public class AllAppsActivity extends ListActivity {
         return result;
     }
  
-   /* private void displayAboutDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.about_title));
-        builder.setMessage(getString(R.string.about_desc));
- 
-        builder.setPositiveButton("Know More", new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int id) {
-                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://javatechig.com"));
-                   startActivity(browserIntent);
-                   dialog.cancel();
-               }
-           });
-        builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-               }
-        });
- 
-        builder.show();
-    }*/
- 
+   
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -92,13 +67,8 @@ public class AllAppsActivity extends ListActivity {
             Intent i = new Intent(this, New_Gesture.class);
             i.putExtra("package_name",app.packageName);
             startActivity(i);
-            
-        	//Intent intent = packageManager.getLaunchIntentForPackage(app.packageName);
- 
-            //if (null != intent) {
-                //startActivity(intent);
-            	
-            //}
+            finish();
+        	
         } catch (ActivityNotFoundException e) {
             Toast.makeText(AllAppsActivity.this, e.getMessage(),
                     Toast.LENGTH_LONG).show();
@@ -129,8 +99,7 @@ public class AllAppsActivity extends ListActivity {
         @Override
         protected Void doInBackground(Void... params) {
             applist = checkForLaunchIntent(packageManager.getInstalledApplications(PackageManager.GET_META_DATA));
-            listadaptor = new ApplicationAdapter(AllAppsActivity.this,
-                    R.layout.snippet_list_row, applist);
+            listadaptor = new ApplicationAdapter(AllAppsActivity.this,R.layout.snippet_list_row, applist);
  
             return null;
         }
@@ -159,4 +128,12 @@ public class AllAppsActivity extends ListActivity {
             super.onProgressUpdate(values);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    	Intent i = new Intent(this, New_Gesture.class);
+        startActivity(i);
+        finish();
+    }
+
 }
