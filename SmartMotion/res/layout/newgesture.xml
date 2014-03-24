@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+     <Button 
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_app" 
+        android:onClick="select_app"
+        />
+     
+     <TextView
+         android:id="@+id/app_selected"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_toRightOf="@id/list"
+         android:text="@string/app_selected_init"
+         android:textSize="7pt" />
+    
+   
+    
+   
+    
+    <Button 
+        
+        android:id="@+id/btnStart"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:text="Start"/>
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:text="Stop"/>
+    
+   <Button 
+       android:id="@+id/btnUpload"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:text="Save"/>
+   <Button 
+        android:id="@+id/back"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Back" 
+        android:onClick="goback"
+        />
+
+    <TextView
+        android:id="@+id/acceleration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X:   Y:   Z:   " />
+    
+    
+
+</LinearLayout>
