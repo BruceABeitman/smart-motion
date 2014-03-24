@@ -19,7 +19,11 @@
     <string name="hello">here will appear the apps with metadata</string>
     <string name="hello2">here will appear the settings</string>
     <string name="title_activity_all_apps">App Selection</string>
-	<string name="select_app">Select App to Launch</string>
-	<string name="new_gesture_filter_label">New Gesture Filter</string>
-	<string name="app_selected_init">App to Launch: Empty</string>
+    <string name="select_app">Select App to Launch</string>
+    <string name="new_gesture_filter_label">New Gesture Filter</string>
+    <string name="app_selected_init">App to Launch: Empty</string>
+    <string name="title_activity_popup_menu">Popup_menu</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="delete_gesture">Delete Gesture</string>
+
 </resources>
