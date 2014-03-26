@@ -32,7 +32,7 @@
             android:label="@string/title_activity_main_menu" >
         </activity>
         <activity
-            android:name="com.cse.smartmotion.New_Gesture"
+            android:name="com.cse.smartmotion.NewGesture"
             android:label="@string/title_activity_new__gesture" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

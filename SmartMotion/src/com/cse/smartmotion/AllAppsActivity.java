@@ -64,7 +64,7 @@ public class AllAppsActivity extends ListActivity {
         ApplicationInfo app = applist.get(position);
         try {
                 	
-            Intent i = new Intent(this, New_Gesture.class);
+            Intent i = new Intent(this, NewGesture.class);
             i.putExtra("package_name",app.packageName);
             startActivity(i);
             finish();
@@ -131,7 +131,7 @@ public class AllAppsActivity extends ListActivity {
 
     @Override
     public void onBackPressed() {
-    	Intent i = new Intent(this, New_Gesture.class);
+    	Intent i = new Intent(this, NewGesture.class);
         startActivity(i);
         finish();
     }
