@@ -71,7 +71,7 @@ private PackageManager packageManager;
 	
 	
 	public void New_Gesture(View view){
-		Intent intent=new Intent(this, New_Gesture.class);
+		Intent intent=new Intent(this, NewGesture.class);
 		startActivity(intent);
 		finish();
 	}
