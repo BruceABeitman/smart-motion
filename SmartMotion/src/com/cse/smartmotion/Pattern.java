@@ -25,8 +25,8 @@ public class Pattern {
 	/*
 	 * Constants
 	 */
-	private static final int FILTER_PERIOD = 3;
-	private static final float THRESHOLD = 1.5f;
+	public static final int FILTER_PERIOD = 75; //millis
+	private static final double THRESHOLD = 1.0;
 	private static final char UP = 'u';
 	private static final char DOWN = 'd';
 	private static final char LEFT = 'l';
@@ -43,7 +43,7 @@ public class Pattern {
 	 */
 	//Create an empty pattern;
 	public Pattern(){
-		this.patternCode = null;
+		this.patternCode = new ArrayList<Character>();
 		this.patternLength = 0;
 	}
 	//Make an independent copy of the input pattern.
@@ -53,8 +53,9 @@ public class Pattern {
 	}
 	//Construct a pattern from a RawData object
 	public Pattern(RawData rawData){
-		rawData.filterNoiseXY(FILTER_PERIOD);
-		this.patternCode = Pattern.generatePatternCodeXY(rawData);
+		RawData tempRawData = new RawData(rawData);
+		tempRawData.filterNoiseXY(FILTER_PERIOD);
+		this.patternCode = Pattern.generatePatternCodeXY(tempRawData);
 		this.patternLength = this.patternCode.size();
 	}
 	
@@ -98,16 +99,16 @@ public class Pattern {
 	public static List<Character> generatePatternCodeXY(RawData rawData) {
 		List<Character> patternCode = new ArrayList<Character>();
 		
-		float[] pitch = rawData.getX();
-		float[] yaw = rawData.getY();
+		double[] pitch = rawData.getX();
+		double[] yaw = rawData.getY();
 		int[] xExtrema = rawData.findExtremaX();
 		int[] yExtrema = rawData.findExtremaY();
 
 		int lengthData = pitch.length;
 //		int lengthData = rawData.getSize();
 		
-		float pitchTemp;
-		float yawTemp;
+		double pitchTemp;
+		double yawTemp;
 		
 		int iter =0;
 		while(iter<lengthData){

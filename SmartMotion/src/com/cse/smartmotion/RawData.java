@@ -1,6 +1,4 @@
 package com.cse.smartmotion;
-
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,45 +32,41 @@ public class RawData {
 	/*
 	 * Fields
 	 */
-	private float[] t;
-	private float[] x;
-	private float[] y;
-	private float[] z;
+	private long[] t; //millis
+	private double[] x;
+	private double[] y;
+	private double[] z;
 	private int dimension; 
-	private int size;
 	
 	/*
 	 * Constructors
 	 */
 	//Initialize an empty data set
 	public RawData() {
-		t = null;
-		x = null;
-		y = null;
-		z = null;
+		t = new long[0];
+		x = new double[0];
+		y = new double[0];
+		z = new double[0];
 		dimension = 0;
-		size =0;
 	}
+
 	//Initialize a time and 1D data set
-	public RawData(float[] time, float[] x){
+	public RawData(long[] time, double[] x){
 		this.t = time.clone();
 		this.x = x.clone();
 		this.y = null;
 		this.z = null;
 		
 		dimension = 1;
-		
-		int[] sizes = {time.length, x.length};
-		size = RawData.min(sizes);
 	}
 	//Initialize a time and 1D data set
-	public RawData(List<Float> time, List<Float> x){
+	public RawData(List<Long> time, List<Double> x){
 		//Pick the minimum size
 		int[] sizes = {time.size(), x.size()};
 		int size = RawData.min(sizes);
 		
-		this.t = new float[size];
-		this.x = new float[size];
+		this.t = new long[size];
+		this.x = new double[size];
 		for(int i=0; i<size; i++){
 			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
@@ -81,29 +75,25 @@ public class RawData {
 		this.z = null;
 		
 		this.dimension =1;
-		this.size = size;
 	}
 	//Initialize a time and 2D data set
-	public RawData(float[] time, float[] x, float[] y){
+	public RawData(long[] time, double[] x, double[] y){
 		this.t = time.clone();
 		this.x = x.clone();
 		this.y = y.clone();
 		this.z = null;
 		
 		dimension = 2;
-		
-		int[] sizes = {time.length, x.length, y.length};
-		size = RawData.min(sizes);
 	}
 	//Initialize a time and 2D data set
-	public RawData(List<Float> time, List<Float> x, List<Float> y){
+	public RawData(List<Long> time, List<Double> x, List<Double> y){
 		//Pick the minimum size
 		int[] sizes = {time.size(), x.size(), y.size()};
 		int size = RawData.min(sizes);
 		
-		this.t = new float[size];
-		this.x = new float[size];
-		this.y = new float[size];
+		this.t = new long[size];
+		this.x = new double[size];
+		this.y = new double[size];
 		for(int i=0; i<size; i++){
 			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
@@ -112,29 +102,25 @@ public class RawData {
 		this.z = null;
 		
 		dimension = 2;
-		this.size = size;
 	}
 	//Initialize a time and 3D data set
-	public RawData(float[] time, float[] x, float[] y, float[] z) {
+	public RawData(long[] time, double[] x, double[] y, double[] z) {
 		this.t = time.clone();
 		this.x = x.clone();
 		this.y = y.clone();
 		this.z = z.clone();
 		
 		this.dimension = 3;
-		
-		int[] sizes = {time.length, x.length, y.length, z.length};
-		size = RawData.min(sizes);
 	}
 	//Initialize a time and 3D data set
-	public RawData(List<Float> time, List<Float> x, List<Float> y, List<Float> z){
+	public RawData(List<Long> time, List<Double> x, List<Double> y, List<Double> z){
 		//Pick the minimum size
 		int[] sizes = {time.size(), x.size(), y.size(), z.size()};
 		int size = RawData.min(sizes);
 		
-		this.t = new float[size];
-		this.x = new float[size];
-		this.y = new float[size];
+		this.t = new long[size];
+		this.x = new double[size];
+		this.y = new double[size];
 		for(int i=0; i<size; i++){
 			this.t[i] = time.get(i);
 			this.x[i] = x.get(i);
@@ -143,29 +129,33 @@ public class RawData {
 		}
 		
 		this.dimension = 3;
-		this.size = size;
 	}	
 	
+	public RawData(RawData rawData) {
+		int length = rawData.getTime().length;
+		this.t = Arrays.copyOf(rawData.getTime(), length);
+		this.x = Arrays.copyOf(rawData.getX(), length);
+		this.y = Arrays.copyOf(rawData.getY(), length);
+		this.z = Arrays.copyOf(rawData.getZ(), length);
+	}
+
 	/*
 	 * Get
 	 */
-	public float[] getTime() {
+	public long[] getTime() {
 		return t;
 	}
-	public float[] getX(){
+	public double[] getX(){
 		return x;
 	}
-	public float[] getY() {
+	public double[] getY() {
 		return y;
 	}
-	public float[] getZ() {
+	public double[] getZ() {
 		return z;
 	}
 	public int getDimension() {
 		return dimension;
-	}
-	public int getSize() {
-		return size;
 	}
 	
 	/*
@@ -173,16 +163,16 @@ public class RawData {
 	 * Warning: as written, these methods are dangerous. It's recommended that you use a constructor to update the fields.
 	 * TODO: size and dimension should be updated consistently with time, x, y, and z
 	 */
-	public void setTime(float[] time) {
+	public void setTime(long[] time) {
 		this.t = time;
 	}
-	public void setX(float[] x) {
+	public void setX(double[] x) {
 		this.x = x;
 	}
-	public void setY(float[] y) {
+	public void setY(double[] y) {
 		this.y = y;
 	}
-	public void setZ(float[] z) {
+	public void setZ(double[] z) {
 		this.z = z;
 	}
 	
@@ -190,27 +180,27 @@ public class RawData {
 	 * Public Utility
 	 */
 	//Returns the running integration of the elements x,y, or z.
-	public float[] integrateX(){
-		if(this.t!=null && this.x!=null){
-			return integrate(this.t,this.x);
-		}
-		else
-			return null;
-	}
-	public float[] integrateY(){
-		if(this.t!=null && this.y!=null){
-			return integrate(this.t,this.y);
-		}
-		else
-			return null;
-	}
-	public float[] integrateZ(){
-		if(this.t!=null && this.z!=null){
-			return integrate(this.t,this.z);
-		}
-		else
-			return null;
-	}
+//	public double[] integrateX(){
+//		if(this.t!=null && this.x!=null){
+//			return integrate(this.t,this.x);
+//		}
+//		else
+//			return null;
+//	}
+//	public double[] integrateY(){
+//		if(this.t!=null && this.y!=null){
+//			return integrate(this.t,this.y);
+//		}
+//		else
+//			return null;
+//	}
+//	public double[] integrateZ(){
+//		if(this.t!=null && this.z!=null){
+//			return integrate(this.t,this.z);
+//		}
+//		else
+//			return null;
+//	}
 	//Returns the indices for the elements in x, y, or z immediately to the left of a zero crossing.
 	public int[] findZeroesX(){
 		return findZeroes(this.x);
@@ -243,10 +233,10 @@ public class RawData {
 		return findCriticalPoints(this.z);
 	}
 
-	//Gives the maximum value in a float array
-	public static float max(float[] values) {
+	//Gives the maximum value in a double array
+	public static double max(double[] values) {
 		int length = values.length;
-		float maxSize=0;
+		double maxSize=0;
 		if(length!=0){
 			maxSize = values[0];
 			for(int i=1; i< length; i++){
@@ -271,10 +261,10 @@ public class RawData {
 		}
 		return maxSize;
 	}	
-	//Gives the minimum value in an float array
-	public static float min(float[] values) {
+	//Gives the minimum value in an double array
+	public static double min(double[] values) {
 		int length = values.length;
-		float minSize=0;
+		double minSize=0;
 		if(length!=0){
 			minSize = values[0];
 			for(int i=1; i< length; i++){
@@ -299,16 +289,72 @@ public class RawData {
 		}
 		return minSize;
 	}
+	//Appends the time, x, and y data point to this RawData object
+	public void appendData2D(long time, double x, double y){		
+		long[] newTime = {time};
+		double[] newX = {x};
+		double[] newY = {y};
+		
+		this.t = appendArrays(this.t, newTime);
+		this.x = appendArrays(this.x, newX);
+		this.y = appendArrays(this.y, newY);
+	}	
+	//Appends the time, x, and y data Lists to this RawData object
+	public void appendData2D(List<Long> time, List<Double> x, List<Double> y){
+		int timeSize = time.size();
+		int xSize = x.size();
+		int ySize = y.size();
+		
+		long[] addTime = new long[timeSize];
+		for(int i=0; i<timeSize; i++){
+			addTime[i] = time.get(i);
+		}
+		this.t = appendArrays(this.t, addTime);
+		
+		double[] addX = new double[xSize];
+		for(int i=0; i<xSize; i++){
+			addX[i] = x.get(i);
+		}
+		this.x = appendArrays(this.x, addX);
+		
+		double[] addY = new double[ySize];
+		for(int i=0; i<ySize; i++){
+			addY[i] = y.get(i);
+		}
+		this.y = appendArrays(this.y, addY);
+	}
+	
+	private long[] appendArrays(long[] array1, long[] array2){
+		long[] newArray = new long[array1.length+array2.length];
+		for(int i=0; i<array1.length;i++){
+			newArray[i]=array1[i];
+		}
+		for(int i=0; i<array2.length; i++){
+			newArray[array1.length+i]=array2[i];
+		}	
+		return newArray;
+	}
+	
+	private double[] appendArrays(double[] array1, double[] array2){
+		double[] newArray = new double[array1.length+array2.length];
+		for(int i=0; i<array1.length;i++){
+			newArray[i]=array1[i];
+		}
+		for(int i=0; i<array2.length; i++){
+			newArray[array1.length+i]=array2[i];
+		}	
+		return newArray;
+	}
 	
 	/*
 	 * Private utility
 	 */
 	//Very basic integration routine. The initial value is set to zero.
-	private static float[] integrate(float[] time, float[] space){
+	private static double[] integrate(double[] time, double[] space){
 		int[] sizes = {time.length, space.length};
 		int length = RawData.min(sizes);
 		
-		float[] integral = new float[length];
+		double[] integral = new double[length];
 		integral[0]=0;
 		for(int i=1; i<length; i++){
 			integral[i]=integral[i-1]+space[i]*time[i];
@@ -318,7 +364,7 @@ public class RawData {
 	//Returns the indices for the elements in the input array.
 	//If a zero crossing does not have a point exactly equal to zero,
 	//this function returns the point directly to the left of the zero crossing.
-	private static int[] findZeroes(float[] data) throws NullPointerException{
+	private static int[] findZeroes(double[] data) throws NullPointerException{
 		if(data==null){
 			throw new NullPointerException();
 		}
@@ -351,15 +397,15 @@ public class RawData {
 			return Arrays.copyOf(zeroes, numZeroes);
 		}
 		else
-			return null;
+			return new int[0];
 	}
 	//Gives the extrema of the absolute value between the initial point, each sequential zero, and the final point in data.
 	//Zeroes should contain all zero crossings in "data", otherwise, findExtrema will miss local extrema.
-	private static int[] findExtrema(float[] data) {
+	private static int[] findExtrema(double[] data) {
 		if(data==null){
 			throw new NullPointerException();
 		}
-		else{
+		else if(data.length>0){
 			int[] zeroes = RawData.findZeroes(data);
 			int numData = data.length;
 			int numZeroes = zeroes.length;
@@ -377,23 +423,25 @@ public class RawData {
 			}
 			return extrema;
 		}
+		else
+			return new int[0];
 	}
 	//Gives the index in data between the indices minIndex and maxIndex that holds the largest absolute value
-	private static int findExtremum(float[] data, int minIndex, int maxIndex) {
-		float extremumAbs = Math.abs(data[minIndex]);
-		int extremumIndex = minIndex;
-		for(int i=minIndex; i<maxIndex; i++){
-			if(Math.abs(data[i])>extremumAbs){
-				extremumAbs = Math.abs(data[i]);
-				extremumIndex = i;
+	private static int findExtremum(double[] data, int minIndex, int maxIndex) {
+			double extremumAbs = Math.abs(data[minIndex]);
+			int extremumIndex = minIndex;
+			for(int i=minIndex; i<maxIndex; i++){
+				if(Math.abs(data[i])>extremumAbs){
+					extremumAbs = Math.abs(data[i]);
+					extremumIndex = i;
+				}
 			}
-		}
-		
-		return extremumIndex;
+			
+			return extremumIndex;
 	}
 	
 	//Get the zeroes and extrema store in list of integers {{index1, index2,...},{type1, type2,...}}
-	private static int[][] findCriticalPoints(float[] data){
+	private static int[][] findCriticalPoints(double[] data){
 		int[] zeroes = RawData.findZeroes(data);
 		int[] extrema = RawData.findExtrema(data);
 		
@@ -438,42 +486,75 @@ public class RawData {
 		return critPointsAndTyp;
 	}
 	
-	public void filterNoiseXY(int period){
-		//if the data length is not a multiple of period, truncate from the end
-		int dataLength=this.size;
-		int newLength;
-		float[] truncTime;
-		float[] truncDataX;
-		float[] truncDataY;
-
-		newLength=dataLength-dataLength%period;
-		truncTime = Arrays.copyOf(this.t, newLength);
-		truncDataX = Arrays.copyOf(this.x, newLength);
-		truncDataY = Arrays.copyOf(this.y, newLength);
+	
+	public void filterNoiseXY(int filterPeriod){
+		this.x = RawData.smoothData(this.t, this.x, filterPeriod);
+		this.y = RawData.smoothData(this.t, this.y, filterPeriod);
+	}
+	
+	//time: the time values associated with data
+	//data: the data to be smoothed
+	//filterPeriod: the period below which signals are reduced by 3dB or more
+	private static double[] smoothData(long[] time, double[] data, int filterPeriod){
+		double value = data[0]; //start with the first input
+		double[] values = new double[data.length]; //the smoothed data
+		values[0] = value;
 		
-		int numPeriod = newLength/period;
-		float[] smoothT = new float[numPeriod];
-		float[] smoothX = new float[numPeriod];
-		float[] smoothY = new float[numPeriod];
-		int iter=0;
-		for(int i=0; i<newLength; i+=period){
-			float sumT =0;
-			float sumX =0;
-			float sumY =0;
-			for(int j=0; j<period; j++){
-				sumT+=truncTime[i+j];
-				sumX+=truncDataX[i+j];
-				sumY+=truncDataY[i+j];
-			}
-			smoothT[iter]=sumT/period;
-			smoothX[iter]=sumX/period;
-			smoothY[iter]=sumY/period;
-			iter++;
+		for(int i=1; i<data.length; i++){
+			double currentValue = data[i];
+			double delT = time[i] - time[i-1];
+			double alpha = (double) (delT / (filterPeriod / (2*Math.PI) + delT));
+			value = value + (currentValue - value) * alpha;
+			values[i] = value;
+			
+			if(alpha>1 || alpha <0)
+				throw new NumberFormatException();
 		}
-		
-		this.t=smoothT;
-		this.x=smoothX;
-		this.y=smoothY;
+		return values;
+	}
+	
+//	//Filters out modes with periods shorter than the input period (input in millis)
+//	public void filterNoiseXY(int period){
+//		//if the data length is not a multiple of period, truncate from the end
+//		int dataLength=this.t.length;
+//		int newLength =(int) ((this.t[this.t.length-1]-this.t[0])/period);
+//		if(newLength!=0){			
+//			long[] smoothT = new long[newLength];
+//			double[] smoothX = new double[newLength];
+//			double[] smoothY = new double[newLength];
+//	
+//			int datIter=0;
+//			int avgIter=0;
+//			int numPeriods=0;
+//			long zeroTime = this.t[0];
+//			while(datIter < dataLength && numPeriods < newLength){
+//				long sumT =0;
+//				double sumX =0;
+//				double sumY =0;
+//				avgIter=0;
+//				while(datIter < dataLength && (this.t[datIter]-zeroTime)<(numPeriods+1)*period){
+//					sumT+=this.t[datIter];
+//					sumX+=this.x[datIter];
+//					sumY+=this.y[datIter];
+//					avgIter++;
+//				}
+//				
+//				smoothT[numPeriods]=sumT/avgIter;
+//				smoothX[numPeriods]=sumX/avgIter;
+//				smoothY[numPeriods]=sumY/avgIter;
+//				datIter+=avgIter;
+//				numPeriods++;
+//			}
+//			
+//			this.t=smoothT;
+//			this.x=smoothX;
+//			this.y=smoothY;
+//		}
+//	}
+
+	public static int idleTime() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	 
 }
