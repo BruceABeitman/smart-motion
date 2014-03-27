@@ -26,7 +26,7 @@ public class Pattern {
 	 * Constants
 	 */
 	public static final int FILTER_PERIOD = 75; //millis
-	private static final double THRESHOLD = 1.0;
+	private static final double THRESHOLD = 4;
 	private static final char UP = 'u';
 	private static final char DOWN = 'd';
 	private static final char LEFT = 'l';

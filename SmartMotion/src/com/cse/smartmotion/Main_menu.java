@@ -49,12 +49,7 @@ private PackageManager packageManager;
 	@Override
 	public void onResume(){
 		super.onResume();
-		Log.d(tag,"my gesture is in onResume!");
-	  
-        
-		
-		
-		
+		Log.d(tag,"my gesture is in onResume!");	
 	}
 	
 	@Override

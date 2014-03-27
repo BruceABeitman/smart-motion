@@ -16,12 +16,14 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
     private List<ApplicationInfo> appsList = null;
     private Context context;
     private PackageManager packageManager;
- 
+    private DatabaseHandler db;
+    
     public ApplicationAdapter(Context context, int textViewResourceId,
             List<ApplicationInfo> appsList) {
         super(context, textViewResourceId, appsList);
         this.context = context;
         this.appsList = appsList;
+        db=new DatabaseHandler(getContext());
         packageManager = context.getPackageManager();
     }
  
@@ -56,7 +58,24 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
             ImageView iconview = (ImageView) view.findViewById(R.id.app_icon);
  
             appName.setText(data.loadLabel(packageManager));
-            packageName.setText(data.packageName);
+            
+            
+            List<Motiongesture> packages_with_gesture = db.getAllGestures();   
+            int dbsize=packages_with_gesture.size();
+    		for (int i = 0; i < dbsize; i++) {
+    			
+    		
+        	String packages = packages_with_gesture.get(i).getName();
+    		if (packages.equals(data.packageName)) {
+    			packageName.setText("Pattern: "+ packages_with_gesture.get(i).getPattern());
+    			break;
+			} else{
+				packageName.setText(data.packageName);
+			}
+        	
+    		}
+    		
+            
             iconview.setImageDrawable(data.loadIcon(packageManager));
         }
         return view;

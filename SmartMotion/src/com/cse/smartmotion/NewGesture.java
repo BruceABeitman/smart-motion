@@ -2,6 +2,7 @@ package com.cse.smartmotion;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -35,7 +36,7 @@ public class NewGesture extends Activity implements SensorEventListener, OnClick
 	
 	
 	//Private fields:
-	private Button btnStart, btnStop, btnUpload;
+	private Button btnStart, btnStop, btnUpload, btnMatch;
 	//private EditText edit;
 	private SensorManager sensorManager;
 	private boolean started=false;
@@ -65,18 +66,25 @@ public class NewGesture extends Activity implements SensorEventListener, OnClick
         btnStart=(Button)findViewById(R.id.btnStart);
         btnStop=(Button)findViewById(R.id.btnStop);
         btnUpload=(Button)findViewById(R.id.btnUpload);
+
         //edit=(EditText)findViewById(R.id.editText);
         
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
         btnUpload.setOnClickListener(this);
         acceleration=(TextView)findViewById(R.id.acceleration);
-        btnStart.setEnabled(true);
+        btnStart.setEnabled(false);
         btnStop.setEnabled(false);
         if(sensorData==null||sensorData.size()==0){
         	btnUpload.setEnabled(false);
         	
         }
+        
+        
+        //Check match
+        btnMatch=(Button)findViewById(R.id.btn_check_match);
+        btnMatch.setOnClickListener(this);
+        btnMatch.setEnabled(false);
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
@@ -111,8 +119,8 @@ public class NewGesture extends Activity implements SensorEventListener, OnClick
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			
-			NavUtils.navigateUpFromSameTask(this);
+			this.onBackPressed();
+//			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -125,19 +133,21 @@ public class NewGesture extends Activity implements SensorEventListener, OnClick
 		Bundle extras = getIntent().getExtras(); 
 		
 		if (null != extras){
-        package_selected = (String) extras.getString("package_name");
-
-        final PackageManager pm = getApplicationContext().getPackageManager();
-        ApplicationInfo app_selected=null;
-        try {
-        	app_selected = pm.getApplicationInfo( package_selected, GET_META_DATA);
-           
-        } catch (final NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        TextView tv = (TextView)findViewById(R.id.app_selected);
-        tv.setText("App to Launch: "+ app_selected.loadLabel(pm));
+	        package_selected = (String) extras.getString("package_name");
+	        
+	        btnStart.setEnabled(true);
+	
+	        final PackageManager pm = getApplicationContext().getPackageManager();
+	        ApplicationInfo app_selected=null;
+	        try {
+	        	app_selected = pm.getApplicationInfo( package_selected, GET_META_DATA);
+	           
+	        } catch (final NameNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        TextView tv = (TextView)findViewById(R.id.app_selected);
+	        tv.setText("App to Launch: "+ app_selected.loadLabel(pm));
 		}
 	}
 	
@@ -181,6 +191,7 @@ public void onClick(View v){
     		btnStart.setEnabled(true);
     		btnStop.setEnabled(false);
     		btnUpload.setEnabled(true);
+    		btnMatch.setEnabled(true);
     		
     		started=false;
     		sensorManager.unregisterListener(this);
@@ -189,6 +200,10 @@ public void onClick(View v){
     	case R.id.btnUpload:
     		adddata();
     		
+    		break;
+    		
+    	case R.id.btn_check_match:
+    		checkMatch();
     		break;
     		
     	default:
@@ -205,10 +220,75 @@ public void onClick(View v){
     public void adddata(){
     	String name=package_selected;
     	String result=record.toString();
-    	db.addGesture(new Motiongesture(name,result));
+    	String user = "LiLi";
+    	String pattern_str = pattern.getPatternCode().toString();
     	
-    	Toast.makeText(NewGesture.this, "DavaSaved", Toast.LENGTH_LONG).show();
+    	List<Motiongesture> packages_with_gesture = db.getAllGestures();   
+    	int match=-1;
+		int dbsize=packages_with_gesture.size();
+		for (int i = 0; i < dbsize; i++) {
+		
+    	String pattern = packages_with_gesture.get(i).getPattern();
+    	if (pattern.equals(pattern_str)) {
+    		 match=i;
+			break;
+		}
     	
+		}
+    	
+    	if (match!=-1) {
+    		
+    		Toast.makeText(NewGesture.this, "You already used this pattern, fool.", Toast.LENGTH_LONG).show();	
+    		
+//    		try{
+//    			Intent launch=this.getPackageManager().getLaunchIntentForPackage(toshow);
+//    			this.startActivity(launch);
+//    		}catch(Exception e){
+//    			e.printStackTrace();
+//    		}
+    		
+		}else{		
+			Motiongesture tosave=new Motiongesture(name,result,user,pattern_str);
+			db.addGesture(tosave);
+			Toast.makeText(NewGesture.this, "DavaSaved", Toast.LENGTH_LONG).show();
+		}
+		
+    }
+    
+    public void checkMatch(){
+    	String name=package_selected;
+    	String result=record.toString();
+    	String user = "LiLi";
+    	String pattern_str = pattern.getPatternCode().toString();
+    	
+    	List<Motiongesture> packages_with_gesture = db.getAllGestures();   
+    	int match=-1;
+		int dbsize=packages_with_gesture.size();
+		for (int i = 0; i < dbsize; i++) {		
+	    	String pattern = packages_with_gesture.get(i).getPattern();
+	    	if (pattern.equals(pattern_str)) {
+	    		 match=i;
+				break;
+	    	}
+		}
+    	
+    	if (match!=-1) {
+    		
+    		String toshow=packages_with_gesture.get(match).getName();
+    		
+    		Toast.makeText(NewGesture.this, "Match Found: Launching " + toshow, Toast.LENGTH_LONG).show();	
+    		
+    		try{
+    			Intent launch=this.getPackageManager().getLaunchIntentForPackage(toshow);
+    			this.startActivity(launch);
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
+    		
+		}else{
+			Toast.makeText(NewGesture.this, "No match found", Toast.LENGTH_LONG).show();
+		}
+		
     }
     
     public void onSensorChanged(SensorEvent event){
@@ -233,6 +313,7 @@ public void onClick(View v){
     				this.gyroData.filterNoiseXY(Pattern.FILTER_PERIOD);
     	    		btnStart.setEnabled(true);
     	    		btnStop.setEnabled(false);
+    	    		btnMatch.setEnabled(true);
     	    		btnUpload.setEnabled(true);
     				started=false;
     	    		sensorManager.unregisterListener(this);
@@ -242,8 +323,6 @@ public void onClick(View v){
     	}
     }
 	
-
-
     @Override
     public void onBackPressed() {
     	Intent i = new Intent(this, Main_menu.class);
