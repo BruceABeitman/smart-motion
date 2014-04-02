@@ -38,11 +38,17 @@ public class CreateAccount extends Activity implements OnClickListener {
 				&& (!password.equals("")) && (!confirm.equals(""))) {
 			this.dh = new DataBaseHelper(this);
 			this.dh.open();
-			this.dh.createAccount(username, password);
+			if (DataBaseHelper.checkAccountExists(username)) {
+				Toast.makeText(CreateAccount.this, "Account exists, sorry.",
+						Toast.LENGTH_SHORT).show();
+			}
+			else {
+				this.dh.createAccount(username, password);
+				Toast.makeText(CreateAccount.this, "username " + username + " has been created",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
 			// this.labResult.setText("Added");
-			Toast.makeText(CreateAccount.this, "new record inserted",
-					Toast.LENGTH_SHORT).show();
-			finish();
 		} else if ((username.equals("")) || (password.equals(""))
 				|| (confirm.equals(""))) {
 			Toast.makeText(CreateAccount.this, "Missing entry", Toast.LENGTH_SHORT)
@@ -65,7 +71,7 @@ public class CreateAccount extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.done_button:
 			CreateAccount();
-			finish();
+//			finish();
 			break;
 		case R.id.cancel_button:
 			finish();

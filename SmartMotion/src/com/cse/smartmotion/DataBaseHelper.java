@@ -34,7 +34,7 @@ public class DataBaseHelper {
 
     private static final String TAG = "NotesDbAdapter";
     private DatabaseHelper mDbHelper;
-    private SQLiteDatabase mDb;
+    private static SQLiteDatabase mDb;
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "accounts";
@@ -151,9 +151,9 @@ public class DataBaseHelper {
 //                KEY_BODY}, null, null, null, null, null);
 //    }
    
-    public boolean checkAccountExists(String user) {
+    public static boolean checkAccountExists(String user) {
     	
-    	Log.i("MyActivity", "usernames TESTESTESETESTES");
+    	Log.i("MyActivity", "checking if: " + user + " exists");
     	List<String> users = new ArrayList<String>();
     	Cursor mCursor = mDb.query(DATABASE_TABLE, new String[] {KEY_USER}, 
     			null, null, null, null, null);
@@ -169,9 +169,11 @@ public class DataBaseHelper {
 		}
 		
 		if (users.contains(user)) {
+			Log.i("MyActivity", user + " exists");
 			return true;
 		}
 		else {
+			Log.i("MyActivity", user + " does not exist");
 			return false;
 		}
 	}
@@ -187,17 +189,28 @@ public class DataBaseHelper {
 
     	String password = null;
     	
-        Cursor mCursor =
-            mDb.query(true, DATABASE_TABLE, new String[] {
-                    KEY_USER, KEY_PASSWORD}, null, null, //KEY_USER + "=" + user, null,
-                    null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        
-//        Log.i("MyActivity", "password: " + mCursor.getString(1));
-        password = mCursor.getString(1);
-        return password;
+    	if (checkAccountExists(user)) {
+	        Cursor mCursor =
+	            mDb.query(true, DATABASE_TABLE, new String[] {
+	                    KEY_USER, KEY_PASSWORD}, KEY_USER + "=" + "'"+user+"'", null,
+	                    null, null, null, null);
+	        if (mCursor != null) {
+	            mCursor.moveToFirst();
+	        }
+//	        if (mCursor.moveToFirst()) {
+//				do {
+////			        Log.i("MyActivity", "usernames: " + mCursor.getString(0));
+//					Log.i("MyActivity", "Printing username: " + mCursor.getString(0) + " "  + mCursor.getString(1));
+//				} while (mCursor.moveToNext());
+//			}
+	        
+	        Log.i("MyActivity", "fetched password: " + mCursor.getString(1));
+	        password = mCursor.getString(1);
+	        return password;
+    	}
+    	else {
+    		return null;
+    	}
     }
 //
 //    /**
