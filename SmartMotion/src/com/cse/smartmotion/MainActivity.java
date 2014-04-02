@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -62,9 +63,9 @@ public class MainActivity extends Activity {
 	}
 	
 	private void verifyAccount() {
-		Intent intent=new Intent(this, Main_menu.class);
-		startActivity(intent);
-		/*
+//		Intent intent=new Intent(this, Main_menu.class);
+//		startActivity(intent);
+		
 		EditText editUsername = (EditText)findViewById(R.id.usr_name_edit);
 		EditText editPassword = (EditText)findViewById(R.id.pass_name_edit);
 
@@ -74,9 +75,11 @@ public class MainActivity extends Activity {
 		if (mDbHelper.checkAccountExists(username)) {
 			// account exists, check password
 			String correctPass = mDbHelper.fetchPassword(username);
+			Log.i("MainActivity", "user entered pass: " + password);
+			Log.i("MainActivity", "correct pass: " + correctPass);
 			if (correctPass.equals(password)) {
 				// correct password, login
-				startActivity(new Intent(this, New_Gesture.class));
+				startActivity(new Intent(this, NewGesture.class));
 			}
 			else {
 				// account exists, but wrong password, display message
@@ -106,7 +109,7 @@ public class MainActivity extends Activity {
 							}).show();
 		}
 	
-	*/
+	
 	}
 	
 
