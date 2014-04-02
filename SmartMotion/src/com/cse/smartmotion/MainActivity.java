@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 			Log.i("MainActivity", "correct pass: " + correctPass);
 			if (correctPass.equals(password)) {
 				// correct password, login
-				startActivity(new Intent(this, NewGesture.class));
+				startActivity(new Intent(this, Main_menu.class));
 			}
 			else {
 				// account exists, but wrong password, display message
