@@ -1,5 +1,8 @@
 package com.cse.smartmotion;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,6 +20,8 @@ public class MainActivity extends Activity {
 	
 	private DataBaseHelper mDbHelper;
 	private static Context context;
+	
+	private AdView mAdView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,12 @@ public class MainActivity extends Activity {
             	startService();
             }
         });
+        
+		 AdRequest adRequest = new AdRequest.Builder().addTestDevice("3A9B4BB089824ED7149E29CF657FABB9").build();
+
+         mAdView = (AdView) findViewById(R.id.adView);
+         mAdView.setAdListener(new ToastAdListener(this));
+         mAdView.loadAd(adRequest);
 	}
 
 	@Override

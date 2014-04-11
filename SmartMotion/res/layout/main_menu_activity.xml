@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -9,25 +10,19 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Main_menu" >
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1" />
-
+    
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentTop="true" >
 
         <Button
             android:id="@+id/new_gesture"
             style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:layout_weight="1"
             android:onClick="New_Gesture"
             android:text="@string/new_gesture" />
@@ -37,10 +32,30 @@
             style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:layout_weight="1"
             android:onClick="Settings"
             android:text="@string/settings" />
+        
     </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1" />
+
+    
+        
+        <com.google.android.gms.ads.AdView
+	        android:id="@+id/adView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true"
+	        ads:adSize="BANNER"
+	        ads:adUnitId="@string/ad_unit_id"/>
+
+
 
 </RelativeLayout>

@@ -9,12 +9,23 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
+    <!-- Used to request banner and interstitial ads. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Used to avoid sending an ad request if there is no connectivity. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
         <activity
             android:name="com.cse.smartmotion.MainActivity"
             android:label="@string/app_name" >
@@ -60,6 +71,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cse.smartmotion.New_Gesture" />
         </activity>
+        
+        <!-- Activity required to show ad overlays. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <receiver android:name="com.cse.smartmotion.BootReceiver" >
             <intent-filter>

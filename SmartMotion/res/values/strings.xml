@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">SmartMotion</string>
+    <string name="ad_unit_id">ca-app-pub-4307857394833064/3620439034</string>
     <string name="action_settings">Settings</string>
     <string name="edit_user_name_message">Insert Username</string>
     <string name="edit_password_message">Insert Password</string>

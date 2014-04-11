@@ -3,6 +3,9 @@ package com.cse.smartmotion;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,7 +28,9 @@ private DatabaseHandler db;
 private List<ApplicationInfo> applist =  new ArrayList<ApplicationInfo>();
 private List<ApplicationInfo> mylist=new ArrayList<ApplicationInfo>();
 private PackageManager packageManager;
- private ApplicationAdapter listadaptor =null;
+private ApplicationAdapter listadaptor =null;
+
+private AdView mAdView;
  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,12 @@ private PackageManager packageManager;
 		 packageManager = getPackageManager();
 		 
 		 new LoadApplications().execute();
+		 
+		 AdRequest adRequest = new AdRequest.Builder().addTestDevice("3A9B4BB089824ED7149E29CF657FABB9").build();
+
+         mAdView = (AdView) findViewById(R.id.adView);
+         mAdView.setAdListener(new ToastAdListener(this));
+         mAdView.loadAd(adRequest);
 	}
 
 	@Override
